@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FM Buddy 2.0 — install</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+  :root {
+    --ink: #e8eef6;
+    --dim: #93a4bb;
+    --bg: #0d1017;
+    --card: #161b26;
+    --line: #273040;
+    --accent: #6ea8ff;
+    --warn: #ffb259;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 4rem;
+    background: radial-gradient(1200px 600px at 50% -10%, #17202f 0%, var(--bg) 60%);
+    color: var(--ink);
+    font: 16px/1.6 ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  h1 { font-size: 2rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+  .sub { color: var(--dim); margin: 0 0 2rem; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 1.5rem; margin: 0 0 1.25rem;
+  }
+  .card h2 { font-size: 1.15rem; margin: 0 0 .35rem; }
+  .card p { margin: 0 0 1rem; color: var(--dim); }
+  .keep { border-color: #2d4a6b; }
+  .keep h2::before { content: "●"; color: var(--accent); margin-right: .5rem; }
+  .wipe h2::before { content: "●"; color: var(--warn); margin-right: .5rem; }
+  esp-web-install-button { display: block; }
+  esp-web-install-button[install-unsupported] { display: none; }
+  .unsupported {
+    display: none; background: #2a1d12; border: 1px solid #5a3c1c;
+    border-radius: 14px; padding: 1.25rem; color: #f0d2ab;
+  }
+  ol, ul { margin: 0 0 0 1.1rem; padding: 0; color: var(--dim); }
+  li { margin: .35rem 0; }
+  code { background: #0a0d13; border: 1px solid var(--line); border-radius: 5px; padding: .1rem .35rem; font-size: .9em; color: var(--ink); }
+  .note { font-size: .92rem; }
+  footer { color: var(--dim); font-size: .88rem; margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1.25rem; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>FM Buddy 2.0</h1>
+  <p class="sub">Install from the browser onto a PCBfun / Freenove ESP32-S3 2.8&quot; board.</p>
+
+  <div class="unsupported" id="nope">
+    <strong>This browser can&rsquo;t flash.</strong> Web Serial works in <strong>Chrome</strong> or
+    <strong>Edge on a computer</strong> &mdash; not Safari, not Firefox, not a phone or tablet.
+    Open this page in one of those, or flash from a terminal with esptool.
+  </div>
+
+  <div class="card keep">
+    <h2>Update &mdash; keeps your settings</h2>
+    <p>
+      Writes the app and tells the board to boot it. Your Wi-Fi, theme, MIDI setup and touch
+      calibration are untouched, because the settings partition is never written. This is the one
+      to use.
+    </p>
+    <esp-web-install-button manifest="firmware/manifest-update.json">
+      <button slot="activate">Update the board</button>
+    </esp-web-install-button>
+  </div>
+
+  <div class="card wipe">
+    <h2>Full install &mdash; erases everything</h2>
+    <p>
+      Writes the whole flash from zero: bootloader, partition table and app. <strong>Your settings
+      are erased.</strong> Only for a board that will not boot, or a brand new one.
+    </p>
+    <esp-web-install-button manifest="firmware/manifest-full.json">
+      <button slot="activate">Erase and install</button>
+    </esp-web-install-button>
+  </div>
+
+  <div class="card">
+    <h2>If the board doesn&rsquo;t appear</h2>
+    <ol>
+      <li>Use a USB-C cable that carries <strong>data</strong>. A charge-only cable is the usual reason.</li>
+      <li>On the board: <strong>Settings &rsaquo; Flash mode &rsaquo; Restart for flashing</strong>.</li>
+      <li>Or hold <strong>BOOT</strong>, tap <strong>RESET</strong>, let go of BOOT.</li>
+      <li>Close anything else using the port &mdash; a serial monitor, the Arduino IDE, PlatformIO.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Before you click: there is no backup here</h2>
+    <p class="note">
+      A browser cannot read your board&rsquo;s flash back, so this page cannot take a copy first the
+      way the desktop scripts do. The update path never writes the settings partition, so your
+      settings are safe by construction &mdash; but if you want to be able to return to the exact
+      firmware you are running now, take a backup from a terminal first:
+    </p>
+    <ul>
+      <li><code>./pcbfun_backup_mac.sh</code> in the source package, or</li>
+      <li><code>esptool.py --chip esp32s3 read-flash 0x10000 0x640000 app0-backup.bin</code></li>
+    </ul>
+    <p class="note">
+      Older releases are on the repository&rsquo;s Releases page, so any published version can be
+      put back from here.
+    </p>
+  </div>
+
+  <footer>
+    FM Buddy 2.0 &mdash; built on <a href="https://github.com/konsumer/fm1buddy">fm1buddy</a> by
+    David Konsumer. GPL-3.0-only. Flashing is at your own risk.
+  </footer>
+</main>
+
+<script type="module">
+  // esp-web-tools hides its button where Web Serial is missing; say why instead of showing nothing
+  const ok = 'serial' in navigator;
+  if (!ok) { document.getElementById('nope').style.display = 'block'; }
+</script>
+</body>
+</html>

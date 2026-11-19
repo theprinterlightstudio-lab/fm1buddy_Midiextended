@@ -1,0 +1,13 @@
+{
+  "name": "FM Buddy 2.0 — full install",
+  "version": "dev",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "fm1buddy-2-factory.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

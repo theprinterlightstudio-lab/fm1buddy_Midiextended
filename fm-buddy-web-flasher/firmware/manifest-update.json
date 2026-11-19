@@ -1,0 +1,20 @@
+{
+  "name": "FM Buddy 2.0 - update",
+  "version": "dev",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "fm1buddy-2-app.bin",
+          "offset": 65536
+        },
+        {
+          "path": "boot_app0.bin",
+          "offset": 57344
+        }
+      ]
+    }
+  ]
+}
