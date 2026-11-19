@@ -1,0 +1,31 @@
+# PlatformIO build output and downloaded libraries
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# host test binaries (tools/unit-test.sh)
+build/
+
+# the simulator's own saved state: these are a running sim's settings, not source
+sim/touch.bin
+sim/start.bin
+sim/routing.bin
+sim/sd/
+
+# vendored python for the Windows flasher
+tools/.pydeps/
+
+# flashing leaves backups of the board beside the scripts: never commit a flash image
+fm1buddy-backup-*/
+*.bin
+
+# recovery/ holds firmware images. They are in the delivered package but kept OUT of git: binaries
+# belong in a GitHub Release, not in the tree, or every clone carries 4.6 MB forever
+recovery/
+
+# editors, OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
